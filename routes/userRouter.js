@@ -43,15 +43,18 @@ router.post('/login', async (req, res) => {
 router.post('/signup', async (req, res) => {
   try {
     const { username, password } = req.body;
-    const hashed = await bcrypt.hash(password, 10);
-    const createdUser = new User({ username, password: hashed });
-    await createdUser.save()
-    const payload = { id: createdUser._id };
+
+    // ❌ Không cần hash ở đây
+    const createdUser = new User({ username, password });
+
+    await createdUser.save(); // Mongoose sẽ tự hash nhờ `pre('save')`
+
     res.status(201).send('User created successfully: ' + createdUser._id);
   } catch (err) {
     res.status(500).send(err.message);
   }
 });
+
 router.get('/logout', (req, res) => {
   req.session.destroy((err) => {
     if (err) {
