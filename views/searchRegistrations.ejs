@@ -1,0 +1,32 @@
+<%- include('admin') %>
+
+<h2>Search Registrations by Date</h2>
+
+<form method="GET" action="/admin/getRegistrationsByDate">
+  <input type="date" name="date" value="<%= date || '' %>" required>
+  <button type="submit">Search</button>
+</form>
+
+<% if (registrations && registrations.length === 0) { %>
+  <p>No students registered on this date.</p>
+<% } else if (registrations) { %>
+  <h3>Results:</h3>
+  <table border="1">
+    <tr>
+      <th>Student</th>
+      <th>Event</th>
+      <th>Description</th>
+      <th>Location</th>
+      <th>Registration Date</th>
+    </tr>
+    <% registrations.forEach(r => { %>
+      <tr>
+        <td>(<%= r.studentId.username %>)</td>
+        <td><%= r.eventId.name %></td>
+        <td><%= r.eventId.description %></td>
+        <td><%= r.eventId.location %></td>
+        <td><%= new Date(r.registrationDate).toLocaleString() %></td>
+      </tr>
+    <% }); %>
+  </table>
+<% } %>

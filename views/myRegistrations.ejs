@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>My Event Registrations</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f7f9fc;
+      margin: 0;
+      padding: 2rem;
+    }
+
+    h2 {
+      text-align: center;
+      color: #2c3e50;
+      margin-bottom: 1.5rem;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: white;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      padding: 12px 15px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+
+    th {
+      background-color: #2ecc71;
+      color: white;
+    }
+
+    tr:hover {
+      background-color: #f2f2f2;
+    }
+
+    .empty-message {
+      text-align: center;
+      font-size: 1.2rem;
+      color: #888;
+      margin-top: 2rem;
+    }
+
+    a.cancel-link {
+      color: #e74c3c;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    a.cancel-link:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <%- include('studentNav') %>
+
+  <div class="container">
+    <h2>My Event Registrations</h2>
+
+    <% if (registrations.length === 0) { %>
+      <p class="empty-message">You haven't registered for any events yet.</p>
+    <% } else { %>
+      <table>
+        <thead>
+          <tr>
+            <th>Event</th>
+            <th>Location</th>
+            <th>Date</th>
+            <th>Unregister</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% registrations.forEach(r => { %>
+            <tr>
+              <td><%= r.eventId.name %></td>
+              <td><%= r.eventId.location %></td>
+              <td><%= new Date(r.eventId.date).toLocaleDateString() %></td>
+              <td>
+                <a class="cancel-link" href="/students/unregister/<%= r._id %>" onclick="return confirm('Are you sure you want to cancel this registration?')">
+                  Cancel
+                </a>
+              </td>
+            </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    <% } %>
+  </div>
+
+</body>
+</html>

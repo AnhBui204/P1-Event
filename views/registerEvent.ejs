@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Available Events</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f0f2f5;
+      margin: 0;
+      padding: 2rem;
+    }
+
+    h2 {
+      text-align: center;
+      color: #2c3e50;
+      margin-bottom: 2rem;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      padding: 12px 15px;
+      text-align: left;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    th {
+      background-color: #3498db;
+      color: white;
+    }
+
+    tr:hover {
+      background-color: #f9f9f9;
+    }
+
+    form {
+      margin: 0;
+    }
+
+    button {
+      padding: 6px 12px;
+      background-color: #2ecc71;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.95rem;
+    }
+
+    button:hover {
+      background-color: #27ae60;
+    }
+
+    button[type="submit"].unregister {
+      background-color: #e74c3c;
+    }
+
+    button[type="submit"].unregister:hover {
+      background-color: #c0392b;
+    }
+
+    .full-text {
+      color: #999;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <%- include('studentNav') %>
+
+  <div class="container">
+    <h2>Available Events</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Location</th>
+          <th>Date</th>
+          <th>Capacity</th>
+          <th>Registered</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% events.forEach(event => { %>
+          <tr>
+            <td><%= event.name %></td>
+            <td><%= event.location %></td>
+            <td><%= new Date(event.date).toLocaleDateString() %></td>
+            <td><%= event.capacity %></td>
+            <td><%= event.registeredCount %></td>
+            <td>
+              <% if (event.isRegistered) { %>
+                <form action="/students/unregister/<%= event.regId %>" method="GET">
+                  <button type="submit" class="unregister" onclick="return confirm('Are you sure to cancel?')">Unregister</button>
+                </form>
+              <% } else if (event.registeredCount < event.capacity) { %>
+                <form action="/students/registrations" method="POST">
+                  <input type="hidden" name="eventId" value="<%= event._id %>">
+                  <button type="submit">Register</button>
+                </form>
+              <% } else { %>
+                <span class="full-text">Full</span>
+              <% } %>
+            </td>
+          </tr>
+        <% }); %>
+      </tbody>
+    </table>
+  </div>
+
+</body>
+</html>
